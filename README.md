@@ -40,4 +40,6 @@ pip install numpy opencv-python
 The above parameters can be tweaked to provide more optimal results based on your input video resolution and noise levels.
 
 ## Demonstration
-![Demo](/DemoMedia/MacroblockMatch.gif)
+<div style="text-align: center;">
+  <img src="/DemoMedia/MacroblockMatch.gif" alt="Demo" />
+</div>
