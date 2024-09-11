@@ -36,4 +36,8 @@ pip install numpy opencv-python
 - `pixel_search_radius = 35`
 - `Tmin = 400`
 - `Tmax = 1000`
+
 The above parameters can be tweaked to provide more optimal results based on your input video resolution and noise levels.
+
+## Demonstration
+![Demo](/DemoMedia/MacroblockMatch.gif)
