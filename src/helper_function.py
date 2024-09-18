@@ -24,10 +24,10 @@ def arrowdraw(img, x1, y1, x2, y2):
 
     u12_ = u12 * math.cos(radians) - v12 * math.sin(radians) + x2
     v12_ = u12 * math.sin(radians) + v12 * math.cos(radians) + y2
-    img = cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 1)
+    img = cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 1)
     img = cv2.line(img, (int(x11_), int(y11_)), (int(x12_), int(y12_)), 
-    (255, 90, 0), 1)
+    (255, 255, 255), 1)
     img = cv2.line(img, (int(u11_), int(v11_)), (int(u12_), int(v12_)), 
-    (255, 90, 0), 1)
+    (255, 255, 255), 1)
     
     return img

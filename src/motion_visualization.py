@@ -5,11 +5,12 @@ import numpy as np
 import math
 from helper_function import arrowdraw
 
-block_radius = 2
+block_radius = 4
 block_dimension = 2 * block_radius + 1
 pixel_search_radius = 35
-Tmin = 400
+Tmin = 300
 Tmax = 100000
+min_vector_dist = 0
 print(f"Block Dimension: {block_dimension}x{block_dimension}")
 
 video_folder = "SourceVideo/"
@@ -17,8 +18,8 @@ frame_folder = "VideoFrames/"
 output_folder = "OutputFrames/"
 
 # change to match video name
-video_name = "Mouse.mov"
-output_video_name = "DVDVector.mp4"
+video_name = "monkey.avi"
+output_video_name = "monkeyvectorized.mp4"
 
 
 def coloured_box(block):
@@ -87,7 +88,8 @@ def macroblock_compare(x, y, frame, next_frame):
 
     for y_target in range(block_radius, int(frame_height)-block_radius+1, block_dimension):
         for x_target in range(block_radius, int(frame_width)-block_radius+1, block_dimension):
-            if (x_target, y_target) != (x, y) and cart_dist((x, y), (x_target, y_target)) <= pixel_search_radius:
+            # if (x_target, y_target) != (x, y) and cart_dist((x, y), (x_target, y_target)) <= pixel_search_radius:
+            if cart_dist((x, y), (x_target, y_target)) <= pixel_search_radius:
                 target_block = next_frame[y_target-block_radius:y_target+block_radius+1, x_target-block_radius:x_target+block_radius+1]
                 # print(target_block.shape)
                 # problem with shaping causing error on line 26 with larger block radii
@@ -96,11 +98,13 @@ def macroblock_compare(x, y, frame, next_frame):
                 ssd_array.append([square_root_ssd(source_block, target_block), (x_target, y_target)])
     
     closest_matched_block_data = min(ssd_array, key=lambda x: x[0])
-    closest_matched_block = next_frame[closest_matched_block_data[1][1]-block_radius:closest_matched_block_data[1][1]+block_radius+1, closest_matched_block_data[1][0]-block_radius:closest_matched_block_data[1][0]+block_radius+1]
-    # print(f"Blocks Searched: {len(ssd_array)}\nBlock Centered At: {x, y}\nClosest Match: [{round(closest_matched_block_data[0])}, {closest_matched_block_data[1]}\n")
-    # coloured_box(source_block)
-    # coloured_box(closest_matched_block)
-    if (closest_matched_block_data[0] <= Tmax and closest_matched_block_data[0] >= Tmin):
+    closest_matched_block = next_frame[closest_matched_block_data[1][1]-block_radius:closest_matched_block_data[1][1]+block_radius+1,
+                                       closest_matched_block_data[1][0]-block_radius:closest_matched_block_data[1][0]+block_radius+1]
+    if show_debugging_info:
+        print(f"Blocks Searched: {len(ssd_array)}\nBlock Centered At: {x, y}\nClosest Match: [{round(closest_matched_block_data[0])}, {closest_matched_block_data[1]}\n")
+        coloured_box(source_block)
+        coloured_box(closest_matched_block)
+    if (closest_matched_block_data[0] <= Tmax and closest_matched_block_data[0] >= Tmin and cart_dist((x, y), (closest_matched_block_data[1][0], closest_matched_block_data[1][1])) > min_vector_dist):
         # sys.exit(0)
         return [x, y, closest_matched_block_data[1][0], closest_matched_block_data[1][1]]
     else:
@@ -144,6 +148,7 @@ if not video.isOpened():
 
 process_video = input("Do you want to compile the video from current output frames (y/n): ")
 output_framerate = int(input("What frame rate should the output video be: "))
+show_debugging_info = int(input("Do you want to show debugging info (1/0): "))
 
 frame_counter = 0
 # array to store video frames
