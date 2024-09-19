@@ -42,4 +42,5 @@ The above parameters can be tweaked to provide more optimal results based on you
 ## Demonstration
 <p align="center">
   <img src="/DemoMedia/MacroblockMatch.gif" alt="Demo" />
+  <img src="/DemoMedia/Monkey.gif" alt="Demo" />
 </p>
