@@ -5,10 +5,10 @@ import numpy as np
 import math
 from helper_function import arrowdraw
 
-block_radius = 4
+block_radius = 2
 block_dimension = 2 * block_radius + 1
-pixel_search_radius = 35
-Tmin = 300
+pixel_search_radius = 40
+Tmin = 30
 Tmax = 100000
 min_vector_dist = 0
 print(f"Block Dimension: {block_dimension}x{block_dimension}")
@@ -41,16 +41,6 @@ def coloured_box(block):
 def square_root_ssd(source_block, target_block):
     source_block = np.array(source_block, dtype=np.int32)
     target_block = np.array(target_block, dtype=np.int32)
-
-    # Old naive approach much slower than taking use
-    # of numpy's faster matrix arithmetic
-
-    # ssd = 0
-    # for x in range(block_dimension):
-    #     for y in range(block_dimension):
-    #         # print((x, y))
-    #         for c in range(3):
-    #             ssd += pow(source_block[x][y][c] - target_block[x][y][c], 2)
 
     ssd = np.sum(pow((source_block - target_block), 2))
 
