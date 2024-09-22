@@ -5,11 +5,11 @@ import numpy as np
 import math
 from helper_function import arrowdraw
 
-block_radius = 2
+block_radius = 5
 block_dimension = 2 * block_radius + 1
 pixel_search_radius = 40
-Tmin = 30
-Tmax = 100000
+Tmin = 350
+Tmax = 1000
 min_vector_dist = 0
 print(f"Block Dimension: {block_dimension}x{block_dimension}")
 
@@ -76,8 +76,8 @@ def macroblock_compare(x, y, frame, next_frame):
     ssd_array = []
 
 
-    for y_target in range(block_radius, int(frame_height)-block_radius+1, block_dimension):
-        for x_target in range(block_radius, int(frame_width)-block_radius+1, block_dimension):
+    for y_target in range(block_radius, int(frame_height)-block_radius, block_dimension):
+        for x_target in range(block_radius, int(frame_width)-block_radius, block_dimension):
             # if (x_target, y_target) != (x, y) and cart_dist((x, y), (x_target, y_target)) <= pixel_search_radius:
             if cart_dist((x, y), (x_target, y_target)) <= pixel_search_radius:
                 target_block = next_frame[y_target-block_radius:y_target+block_radius+1, x_target-block_radius:x_target+block_radius+1]
@@ -165,8 +165,8 @@ if process_video != "y":
     for frame in range(frame_counter-1):
         vector_array = []
         # block_count = 0
-        for y in range(block_radius, int(frame_height)-block_radius+1, block_dimension):
-            for x in range(block_radius, int(frame_width)-block_radius+1, block_dimension):
+        for y in range(block_radius, int(frame_height)-block_radius, block_dimension):
+            for x in range(block_radius, int(frame_width)-block_radius, block_dimension):
                 vector_array.append(macroblock_compare(x, y, frame_array[frame], frame_array[frame+1]))
                 # block_count += 1
         filtered_vector_array = [vector for vector in vector_array if vector is not None]
@@ -176,7 +176,7 @@ if process_video != "y":
         print(f"Frame: {frame}")
 
 
-out = cv2.VideoWriter(output_video_name, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), output_framerate, (int(frame_width), int(frame_height)))
+out = cv2.VideoWriter(output_video_name, cv2.VideoWriter_fourcc(*'H264'), output_framerate, (int(frame_width), int(frame_height)))
 frame_counter = 0
 while True:
     img = cv2.imread(output_folder + 'output%d.png' % frame_counter)
